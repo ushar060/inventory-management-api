@@ -1,81 +1,130 @@
-# Inventory Management API
+# 📦 Inventory Management API
 
 A full-stack inventory management system built with **Django** and **Django REST Framework**.
 
-The application provides a REST API for managing products, categories, suppliers, and stock movements. It also includes JWT authentication, low-stock tracking, stock history, role-based permissions, Swagger/OpenAPI documentation, and a responsive web dashboard.
+The application provides a RESTful API for managing products, categories, suppliers, stock movements, and low-stock inventory, along with a web-based dashboard for managing the inventory.
 
 ## 🚀 Live Demo
 
 **Login Page:**  
 https://inventory-management-api-q0x5.onrender.com/login/
 
-Use the login page to access the deployed inventory management dashboard.
+**API Documentation (Swagger):**  
+https://inventory-management-api-q0x5.onrender.com/api/docs/
 
-> **Note:** The application is hosted on Render's free tier, so it may take a short time to wake up if it has been inactive.
+> The application is deployed on Render. Since it uses a free-tier instance, the first request after inactivity may take some time while the server wakes up.
+
+---
+
+## 🔐 Demo Access
+
+Use the demo account to explore the deployed application.
+
+**Username:** `demo`  
+**Password:** `demo1234`
+
+**Login:**  
+https://inventory-management-api-q0x5.onrender.com/login/
+
+> The demo account is a regular user account and is not a superuser.
 
 ---
 
 ## 📌 Features
 
+### Product Management
+- Create, view, update, and delete products
+- Product SKU management
+- Product pricing
+- Stock quantity tracking
+- Minimum stock threshold
+- Category and supplier association
+- Product search
+- Filter products by category
+- Filter products by supplier
+- Identify low-stock products
+
+### Category Management
+- Create categories
+- View categories
+- Update categories
+- Delete categories
+
+### Supplier Management
+- Create suppliers
+- View suppliers
+- Update suppliers
+- Delete suppliers
+
+### Stock Management
+- Record stock-in movements
+- Record stock-out movements
+- Automatically update product stock quantities
+- Prevent stock from becoming negative
+- Maintain stock movement history
+- View stock history for individual products
+
+### Authentication & Authorization
+- User registration
 - JWT-based authentication
-- User registration and login
-- Product CRUD operations
-- Category CRUD operations
-- Supplier CRUD operations
-- Stock-in and stock-out management
-- Automatic inventory quantity updates
-- Stock movement history
-- Low-stock detection
-- Product search and filtering
-- Pagination
-- Role-based permissions
-- Swagger/OpenAPI API documentation
-- Responsive Bootstrap dashboard
-- PostgreSQL database
-- Production deployment with Render
-- Gunicorn application server
-- WhiteNoise static file handling
+- JWT token refresh
+- Protected API endpoints
+- Staff-based permissions for inventory modifications
+- Read-only access for unauthenticated users where applicable
+
+### Dashboard
+- Inventory overview
+- Total product count
+- Low-stock product count
+- Product management interface
+- Category management
+- Supplier management
+- Stock movement management
+
+### API Documentation
+- Interactive Swagger API documentation
+- OpenAPI schema
+- JWT authentication support
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Backend
-
 - Python
 - Django
 - Django REST Framework
 - Simple JWT
 
 ### Database
-
 - PostgreSQL
 
 ### API Documentation
-
 - drf-spectacular
-- OpenAPI
 - Swagger UI
+- OpenAPI
 
 ### Frontend
-
 - HTML
 - CSS
 - Bootstrap
 - JavaScript
 
 ### Deployment
-
 - Render
 - Gunicorn
 - WhiteNoise
+
+### Configuration
+- python-decouple
+- dj-database-url
 
 ---
 
 ## 🏗️ Project Structure
 
 ```text
-inventory-management-api/
+Inventory Management Django/
 │
 ├── config/
 │   ├── settings.py
@@ -85,8 +134,9 @@ inventory-management-api/
 │
 ├── inventory/
 │   ├── migrations/
-│   ├── static/
 │   ├── templates/
+│   │   └── inventory/
+│   ├── static/
 │   ├── admin.py
 │   ├── apps.py
 │   ├── models.py
@@ -98,5 +148,5 @@ inventory-management-api/
 ├── .gitignore
 ├── build.sh
 ├── manage.py
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
