@@ -1,94 +1,102 @@
 # Inventory Management API
 
-A RESTful inventory management backend built with Django and Django REST Framework.
+A full-stack inventory management system built with **Django** and **Django REST Framework**.
 
-The API provides product, category, supplier, and stock management functionality with JWT authentication, role-based permissions, search, filtering, pagination, low-stock detection, stock history, and interactive Swagger documentation.
+The application provides a REST API for managing products, categories, suppliers, and stock movements. It also includes JWT authentication, low-stock tracking, stock history, role-based permissions, Swagger/OpenAPI documentation, and a responsive web dashboard.
 
-## Features
+## 🚀 Live Demo
 
+**Login Page:**  
+https://inventory-management-api-q0x5.onrender.com/login/
+
+Use the login page to access the deployed inventory management dashboard.
+
+> **Note:** The application is hosted on Render's free tier, so it may take a short time to wake up if it has been inactive.
+
+---
+
+## 📌 Features
+
+- JWT-based authentication
+- User registration and login
 - Product CRUD operations
 - Category CRUD operations
 - Supplier CRUD operations
-- Stock IN and Stock OUT management
-- Automatic product quantity updates
+- Stock-in and stock-out management
+- Automatic inventory quantity updates
 - Stock movement history
 - Low-stock detection
-- Product search by name and SKU
-- Filtering by category and supplier
-- Low-stock filtering
-- API pagination
-- User registration
-- JWT authentication
+- Product search and filtering
+- Pagination
 - Role-based permissions
-- Swagger/OpenAPI documentation
-- SQLite for local development
-- PostgreSQL-ready configuration
+- Swagger/OpenAPI API documentation
+- Responsive Bootstrap dashboard
+- PostgreSQL database
+- Production deployment with Render
+- Gunicorn application server
+- WhiteNoise static file handling
 
-## Tech Stack
+---
+
+## 🛠️ Tech Stack
+
+### Backend
 
 - Python
 - Django
 - Django REST Framework
 - Simple JWT
+
+### Database
+
 - PostgreSQL
-- SQLite
+
+### API Documentation
+
 - drf-spectacular
-- python-decouple
+- OpenAPI
+- Swagger UI
 
-## API Endpoints
+### Frontend
 
-### Authentication
+- HTML
+- CSS
+- Bootstrap
+- JavaScript
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/register/` | Register a new user |
-| POST | `/api/login/` | Obtain JWT access and refresh tokens |
-| POST | `/api/token/refresh/` | Refresh an access token |
+### Deployment
 
-### Products
+- Render
+- Gunicorn
+- WhiteNoise
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/products/` | List products |
-| POST | `/api/products/` | Create a product |
-| GET | `/api/products/{id}/` | Retrieve a product |
-| PUT/PATCH | `/api/products/{id}/` | Update a product |
-| DELETE | `/api/products/{id}/` | Delete a product |
-| GET | `/api/products/low-stock/` | List low-stock products |
-| GET | `/api/products/{id}/stock-history/` | View product stock history |
+---
 
-### Categories
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/categories/` | List categories |
-| POST | `/api/categories/` | Create a category |
-| GET | `/api/categories/{id}/` | Retrieve a category |
-| PUT/PATCH | `/api/categories/{id}/` | Update a category |
-| DELETE | `/api/categories/{id}/` | Delete a category |
-
-### Suppliers
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/suppliers/` | List suppliers |
-| POST | `/api/suppliers/` | Create a supplier |
-| GET | `/api/suppliers/{id}/` | Retrieve a supplier |
-| PUT/PATCH | `/api/suppliers/{id}/` | Update a supplier |
-| DELETE | `/api/suppliers/{id}/` | Delete a supplier |
-
-### Stock Movements
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/stock-movements/` | List stock movements |
-| POST | `/api/stock-movements/` | Create a stock movement |
-
-## Search and Filtering
-
-Products can be searched and filtered using query parameters.
-
-### Search by product name or SKU
+## 🏗️ Project Structure
 
 ```text
-/api/products/?search=laptop
+inventory-management-api/
+│
+├── config/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── inventory/
+│   ├── migrations/
+│   ├── static/
+│   ├── templates/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── permissions.py
+│   ├── serializers.py
+│   ├── urls.py
+│   └── views.py
+│
+├── .gitignore
+├── build.sh
+├── manage.py
+├── requirements.txt
+└── README.md
