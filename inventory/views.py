@@ -1,6 +1,7 @@
 from rest_framework import generics, serializers
 from rest_framework.permissions import AllowAny
 from django.db import models, transaction
+from django.shortcuts import render
 
 from .models import Product, Category, Supplier, StockMovement
 from .serializers import (
@@ -122,3 +123,10 @@ class ProductStockHistoryView(generics.ListAPIView):
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
+
+def login_page(request):
+    return render(request, "inventory/login.html")
+
+
+def dashboard_page(request):
+    return render(request, "inventory/dashboard.html")

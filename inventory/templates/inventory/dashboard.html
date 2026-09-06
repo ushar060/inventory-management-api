@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Inventory Management Dashboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'inventory/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ========================= -->
+<!-- NAVBAR -->
+<!-- ========================= -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container-fluid">
+
+        <span class="navbar-brand">
+            Inventory Management
+        </span>
+
+        <button
+            class="btn btn-outline-light"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- ========================= -->
+<!-- MAIN CONTAINER -->
+<!-- ========================= -->
+
+<div class="container-fluid mt-4">
+
+    <div class="row">
+
+
+        <!-- ========================= -->
+        <!-- SIDEBAR -->
+        <!-- ========================= -->
+
+        <div class="col-md-2">
+
+            <div class="list-group">
+
+                <button
+                    id="dashboardNav"
+                    class="list-group-item list-group-item-action active"
+                    onclick="showSection('dashboard')"
+                >
+                    Dashboard
+                </button>
+
+
+                <button
+                    id="productsNav"
+                    class="list-group-item list-group-item-action"
+                    onclick="showSection('products')"
+                >
+                    Products
+                </button>
+
+
+                <button
+                    id="categoriesNav"
+                    class="list-group-item list-group-item-action"
+                    onclick="showSection('categories')"
+                >
+                    Categories
+                </button>
+
+
+                <button
+                    id="suppliersNav"
+                    class="list-group-item list-group-item-action"
+                    onclick="showSection('suppliers')"
+                >
+                    Suppliers
+                </button>
+
+
+                <button
+                    id="movementsNav"
+                    class="list-group-item list-group-item-action"
+                    onclick="showSection('movements')"
+                >
+                    Stock Movements
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- MAIN CONTENT -->
+        <!-- ========================= -->
+
+        <div class="col-md-10">
+
+
+            <!-- ========================= -->
+            <!-- DASHBOARD SECTION -->
+            <!-- ========================= -->
+
+            <div
+                id="dashboardSection"
+                class="content-section"
+            >
+
+                <div class="mb-4">
+
+                    <h2>
+                        Dashboard
+                    </h2>
+
+                    <p class="text-muted">
+                        Overview of your inventory
+                    </p>
+
+                </div>
+
+
+                <!-- Statistics -->
+
+                <div class="row mb-4">
+
+
+                    <!-- Total Products -->
+
+                    <div class="col-md-4">
+
+                        <div class="card shadow-sm">
+
+                            <div class="card-body">
+
+                                <h6 class="text-muted">
+                                    Total Products
+                                </h6>
+
+                                <h2 id="totalProducts">
+                                    0
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Low Stock -->
+
+                    <div class="col-md-4">
+
+                        <div class="card shadow-sm">
+
+                            <div class="card-body">
+
+                                <h6 class="text-muted">
+                                    Low Stock
+                                </h6>
+
+                                <h2 id="lowStockProducts">
+                                    0
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-md-4">
+
+                        <div class="card shadow-sm">
+
+                            <div class="card-body">
+
+                                <h6 class="text-muted">
+                                    Inventory Status
+                                </h6>
+
+                                <h2>
+                                    Active
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Dashboard Product Preview -->
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <h4 class="mb-3">
+                            Recent Products
+                        </h4>
+
+                        <p class="text-muted">
+                            Use the Products section to manage your inventory.
+                        </p>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="showSection('products')"
+                        >
+                            View Products
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- PRODUCTS SECTION -->
+            <!-- ========================= -->
+
+            <div
+                id="productsSection"
+                class="content-section d-none"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h2>
+                            Products
+                        </h2>
+
+                        <p class="text-muted">
+                            Manage your inventory products
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#productModal"
+                        onclick="openAddProductModal()"
+                    >
+                        + Add Product
+                    </button>
+
+                </div>
+
+
+                <!-- Search -->
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="form-control"
+                            placeholder="Search by name or SKU..."
+                            onkeyup="searchProducts()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Product Table -->
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>SKU</th>
+                                        <th>Category</th>
+                                        <th>Supplier</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="productTableBody">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- CATEGORIES SECTION -->
+            <!-- ========================= -->
+
+            <div
+                id="categoriesSection"
+                class="content-section d-none"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h2>
+                            Categories
+                        </h2>
+
+                        <p class="text-muted">
+                            Manage product categories
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#categoryModal"
+                        onclick="openAddCategoryModal()"
+                    >
+                        + Add Category
+                    </button>
+
+                </div>
+
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="categoryTableBody">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- SUPPLIERS SECTION -->
+            <!-- ========================= -->
+
+            <div
+                id="suppliersSection"
+                class="content-section d-none"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h2>
+                            Suppliers
+                        </h2>
+
+                        <p class="text-muted">
+                            Manage product suppliers
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#supplierModal"
+                    >
+                        + Add Supplier
+                    </button>
+
+                </div>
+
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                        <th>Actions</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="supplierTableBody">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- STOCK MOVEMENTS SECTION -->
+            <!-- ========================= -->
+
+            <div
+                id="movementsSection"
+                class="content-section d-none"
+            >
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h2>
+                            Stock Movements
+                        </h2>
+
+                        <p class="text-muted">
+                            Track stock coming in and going out
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#movementModal"
+                    >
+                        + Stock Movement
+                    </button>
+
+                </div>
+
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Product</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                        <th>Reason</th>
+                                        <th>Date</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="movementTableBody">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- PRODUCT MODAL -->
+<!-- ========================= -->
+
+<div
+    class="modal fade"
+    id="productModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="productModalTitle"
+                >
+                    Add Product
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="productForm">
+
+                    <input
+                        type="hidden"
+                        id="productId"
+                    >
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Product Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productName"
+                            class="form-control"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            SKU
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productSku"
+                            class="form-control"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="productDescription"
+                            class="form-control"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Price
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productPrice"
+                            class="form-control"
+                            step="0.01"
+                            min="0.01"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productQuantity"
+                            class="form-control"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Low Stock Threshold
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productThreshold"
+                            class="form-control"
+                            min="0"
+                            value="5"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Category
+                        </label>
+
+                        <select
+                            id="productCategory"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Supplier
+                        </label>
+
+                        <select
+                            id="productSupplier"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                No supplier
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        id="productError"
+                        class="alert alert-danger d-none"
+                    ></div>
+
+                </form>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="saveProduct()"
+                >
+                    Save Product
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- CATEGORY MODAL -->
+<!-- ========================= -->
+
+<div
+    class="modal fade"
+    id="categoryModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="categoryModalTitle"
+                >
+                    Add Category
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="categoryForm">
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Category Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="categoryName"
+                            class="form-control"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="categoryDescription"
+                            class="form-control"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div
+                        id="categoryError"
+                        class="alert alert-danger d-none"
+                    ></div>
+
+                </form>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="saveCategory()"
+                >
+                    Save Category
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- SUPPLIER MODAL -->
+<!-- ========================= -->
+
+<div
+    class="modal fade"
+    id="supplierModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Add Supplier
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="supplierForm">
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Supplier Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="supplierName"
+                            class="form-control"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="supplierEmail"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Phone
+                        </label>
+
+                        <input
+                            type="text"
+                            id="supplierPhone"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea
+                            id="supplierAddress"
+                            class="form-control"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div
+                        id="supplierError"
+                        class="alert alert-danger d-none"
+                    ></div>
+
+                </form>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="saveSupplier()"
+                >
+                    Save Supplier
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- STOCK MOVEMENT MODAL -->
+<!-- ========================= -->
+
+<div
+    class="modal fade"
+    id="movementModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Stock Movement
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="movementForm">
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Product
+                        </label>
+
+                        <select
+                            id="movementProduct"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+                                Select product
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Movement Type
+                        </label>
+
+                        <select
+                            id="movementType"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+                                Select type
+                            </option>
+
+                            <option value="IN">
+                                Stock In
+                            </option>
+
+                            <option value="OUT">
+                                Stock Out
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="movementQuantity"
+                            class="form-control"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Reason
+                        </label>
+
+                        <input
+                            type="text"
+                            id="movementReason"
+                            class="form-control"
+                            placeholder="e.g. New shipment"
+                        >
+
+                    </div>
+
+
+                    <div
+                        id="movementError"
+                        class="alert alert-danger d-none"
+                    ></div>
+
+                </form>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="saveMovement()"
+                >
+                    Save Movement
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- BOOTSTRAP -->
+<!-- ========================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<!-- ========================= -->
+<!-- APPLICATION JAVASCRIPT -->
+<!-- ========================= -->
+
+<script src="{% static 'inventory/js/app.js' %}"></script>
+
+
+</body>
+
+</html>

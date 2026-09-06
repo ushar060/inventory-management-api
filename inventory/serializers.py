@@ -8,6 +8,16 @@ class ProductSerializer(serializers.ModelSerializer):
 
     low_stock = serializers.SerializerMethodField()
 
+    category_name = serializers.CharField(
+        source="category.name",
+        read_only=True
+    )
+
+    supplier_name = serializers.CharField(
+        source="supplier.name",
+        read_only=True
+    )
+
     def get_low_stock(self, obj):
         return obj.quantity <= obj.low_stock_threshold
 
@@ -27,6 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
+
         fields = (
             "id",
             "name",
@@ -36,12 +47,19 @@ class ProductSerializer(serializers.ModelSerializer):
             "quantity",
             "low_stock_threshold",
             "category",
+            "category_name",
             "supplier",
+            "supplier_name",
             "created_at",
             "updated_at",
             "low_stock",
         )
-        read_only_fields = ("low_stock",)
+
+        read_only_fields = (
+            "low_stock",
+            "category_name",
+            "supplier_name",
+        )
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -60,6 +78,11 @@ class SupplierSerializer(serializers.ModelSerializer):
 
 class StockMovementSerializer(serializers.ModelSerializer):
 
+    product_name = serializers.CharField(
+        source="product.name",
+        read_only=True
+    )
+
     def validate_quantity(self, value):
         if value <= 0:
             raise serializers.ValidationError(
@@ -69,7 +92,20 @@ class StockMovementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StockMovement
-        fields = "__all__"
+
+        fields = (
+            "id",
+            "product",
+            "product_name",
+            "movement_type",
+            "quantity",
+            "reason",
+            "created_at",
+        )
+
+        read_only_fields = (
+            "product_name",
+        )
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -78,6 +114,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+
         fields = (
             "username",
             "email",
@@ -85,6 +122,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
+
         user = User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],

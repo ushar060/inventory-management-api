@@ -1,0 +1,176 @@
+body {
+    background-color: #f5f6f8;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    min-height: 60px;
+}
+
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.list-group {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+.list-group-item {
+    border: none;
+    padding: 12px 16px;
+    font-weight: 500;
+}
+
+
+.list-group-item:hover {
+    background-color: #e9ecef;
+}
+
+
+.list-group-item.active {
+    font-weight: 600;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+
+.card.shadow-sm {
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+
+/* =========================
+   DASHBOARD STATISTICS
+========================= */
+
+.card-body h2 {
+    font-weight: 600;
+}
+
+
+/* =========================
+   TABLES
+========================= */
+
+.table {
+    vertical-align: middle;
+}
+
+
+.table thead th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6c757d;
+    white-space: nowrap;
+}
+
+
+.table tbody td {
+    padding-top: 13px;
+    padding-bottom: 13px;
+}
+
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+    border-radius: 7px;
+}
+
+
+.btn-sm {
+    padding: 5px 10px;
+}
+
+
+/* =========================
+   FORMS
+========================= */
+
+.form-control,
+.form-select {
+    border-radius: 7px;
+}
+
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+.modal-content {
+    border: none;
+    border-radius: 12px;
+}
+
+
+.modal-header {
+    border-bottom: 1px solid #eee;
+}
+
+
+.modal-footer {
+    border-top: 1px solid #eee;
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+.badge {
+    padding: 6px 9px;
+    border-radius: 6px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .col-md-2 {
+        margin-bottom: 20px;
+    }
+
+    .table {
+        font-size: 0.9rem;
+    }
+
+}

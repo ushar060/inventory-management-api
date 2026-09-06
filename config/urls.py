@@ -6,16 +6,52 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from inventory.views import (
+    login_page,
+    dashboard_page,
+)
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
 
-    path("api/", include("inventory.urls")),
+    # Django Admin
+    path(
+        "admin/",
+        admin.site.urls
+    ),
 
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+
+    # Inventory API
+    path(
+        "api/",
+        include("inventory.urls")
+    ),
+
+
+    # Swagger / OpenAPI
+    path(
+        "api/schema/",
+        SpectacularAPIView.as_view(),
+        name="schema",
+    ),
+
     path(
         "api/docs/",
-        SpectacularSwaggerView.as_view(url_name="schema"),
+        SpectacularSwaggerView.as_view(
+            url_name="schema"
+        ),
         name="swagger-ui",
+    ),
+
+
+    # Frontend pages
+    path(
+        "login/",
+        login_page
+    ),
+
+    path(
+        "dashboard/",
+        dashboard_page
     ),
 ]
