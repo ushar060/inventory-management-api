@@ -1,24 +1,32 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Inventory Management Dashboard</title>
+    <title>
+        StockPilot — Inventory Intelligence Platform
+    </title>
 
+    <!-- Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
-    {% load static %}
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
 
+    <!-- StockPilot CSS -->
     <link
         rel="stylesheet"
         href="{% static 'inventory/css/style.css' %}"
@@ -29,392 +37,1222 @@
 
 <body>
 
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
 
-<!-- ========================= -->
-<!-- NAVBAR -->
-<!-- ========================= -->
+<header class="sp-topbar">
 
-<nav class="navbar navbar-dark bg-dark">
+    <div class="sp-brand">
 
-    <div class="container-fluid">
+        <div class="sp-brand-mark">
+            <i class="bi bi-box-seam"></i>
+        </div>
 
-        <span class="navbar-brand">
-            Inventory Management
-        </span>
+        <div>
+
+            <div class="sp-brand-name">
+                StockPilot
+            </div>
+
+            <div class="sp-brand-subtitle">
+                Inventory Intelligence Platform
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="sp-topbar-right">
+
+        <div class="sp-system-status">
+
+            <span class="sp-status-dot"></span>
+
+            <span>
+                System operational
+            </span>
+
+        </div>
+
 
         <button
-            class="btn btn-outline-light"
+            class="sp-icon-button"
+            type="button"
+            data-refresh-dashboard
+            title="Refresh"
+        >
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+
+
+        <button
+            class="sp-logout-button"
+            type="button"
             onclick="logout()"
         >
+            <i class="bi bi-box-arrow-right"></i>
             Logout
         </button>
 
     </div>
 
-</nav>
+</header>
 
 
-<!-- ========================= -->
-<!-- MAIN CONTAINER -->
-<!-- ========================= -->
 
-<div class="container-fluid mt-4">
+<!-- =========================================================
+     APPLICATION SHELL
+========================================================= -->
 
-    <div class="row">
+<div class="sp-app-shell">
 
 
-        <!-- ========================= -->
-        <!-- SIDEBAR -->
-        <!-- ========================= -->
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-        <div class="col-md-2">
+    <aside class="sp-sidebar">
 
-            <div class="list-group">
 
-                <button
-                    id="dashboardNav"
-                    class="list-group-item list-group-item-action active"
-                    onclick="showSection('dashboard')"
-                >
+        <!-- Overview -->
+
+        <div class="sp-nav-group">
+
+            <div class="sp-nav-label">
+                Overview
+            </div>
+
+
+            <button
+                id="dashboardNav"
+                class="sp-nav-item active"
+                type="button"
+            >
+
+                <i class="bi bi-grid-1x2"></i>
+
+                <span>
                     Dashboard
-                </button>
+                </span>
+
+            </button>
+
+        </div>
 
 
-                <button
-                    id="productsNav"
-                    class="list-group-item list-group-item-action"
-                    onclick="showSection('products')"
-                >
+
+        <!-- Inventory -->
+
+        <div class="sp-nav-group">
+
+            <div class="sp-nav-label">
+                Inventory
+            </div>
+
+
+            <button
+                id="productsNav"
+                class="sp-nav-item"
+                type="button"
+            >
+
+                <i class="bi bi-box"></i>
+
+                <span>
                     Products
-                </button>
+                </span>
+
+            </button>
 
 
-                <button
-                    id="categoriesNav"
-                    class="list-group-item list-group-item-action"
-                    onclick="showSection('categories')"
-                >
+            <button
+                id="categoriesNav"
+                class="sp-nav-item"
+                type="button"
+            >
+
+                <i class="bi bi-collection"></i>
+
+                <span>
                     Categories
-                </button>
+                </span>
+
+            </button>
 
 
-                <button
-                    id="suppliersNav"
-                    class="list-group-item list-group-item-action"
-                    onclick="showSection('suppliers')"
-                >
-                    Suppliers
-                </button>
+            <button
+                id="movementsNav"
+                class="sp-nav-item"
+                type="button"
+            >
 
+                <i class="bi bi-arrow-left-right"></i>
 
-                <button
-                    id="movementsNav"
-                    class="list-group-item list-group-item-action"
-                    onclick="showSection('movements')"
-                >
+                <span>
                     Stock Movements
-                </button>
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- Operations -->
+
+        <div class="sp-nav-group">
+
+            <div class="sp-nav-label">
+                Operations
+            </div>
+
+
+            <button
+                id="suppliersNav"
+                class="sp-nav-item"
+                type="button"
+            >
+
+                <i class="bi bi-truck"></i>
+
+                <span>
+                    Suppliers
+                </span>
+
+            </button>
+
+
+            <button
+                id="purchaseOrdersNav"
+                class="sp-nav-item"
+                type="button"
+            >
+
+                <i class="bi bi-receipt"></i>
+
+                <span>
+                    Purchase Orders
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- Intelligence -->
+
+        <div class="sp-nav-group">
+
+            <div class="sp-nav-label">
+                Intelligence
+            </div>
+
+
+            <button
+                id="supplierIntelligenceNav"
+                class="sp-nav-item"
+                type="button"
+            >
+
+                <i class="bi bi-bar-chart-line"></i>
+
+                <span>
+                    Supplier Health
+                </span>
+
+            </button>
+
+
+            <button
+                id="inventoryRiskNav"
+                class="sp-nav-item"
+                type="button"
+                onclick="showSection('dashboard')"
+            >
+
+                <i class="bi bi-activity"></i>
+
+                <span>
+                    Inventory Risk
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- AI -->
+
+        <div class="sp-nav-group">
+
+            <div class="sp-nav-label">
+                AI
+            </div>
+
+
+            <button
+                id="copilotNav"
+                class="sp-nav-item sp-copilot-nav"
+                type="button"
+                onclick="openCopilot()"
+            >
+
+                <i class="bi bi-stars"></i>
+
+                <span>
+                    Copilot
+                </span>
+
+                <span class="sp-ai-badge">
+                    AI
+                </span>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- Sidebar footer -->
+
+        <div class="sp-sidebar-footer">
+
+            <div class="sp-workspace-card">
+
+                <div class="sp-workspace-icon">
+                    <i class="bi bi-boxes"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        StockPilot Workspace
+                    </strong>
+
+                    <span>
+                        Operations
+                    </span>
+
+                </div>
 
             </div>
 
         </div>
 
-
-        <!-- ========================= -->
-        <!-- MAIN CONTENT -->
-        <!-- ========================= -->
-
-        <div class="col-md-10">
+    </aside>
 
 
-            <!-- ========================= -->
-            <!-- DASHBOARD SECTION -->
-            <!-- ========================= -->
 
-            <div
-                id="dashboardSection"
-                class="content-section"
-            >
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
 
-                <div class="mb-4">
+    <main class="sp-main">
 
-                    <h2>
-                        Dashboard
-                    </h2>
 
-                    <p class="text-muted">
-                        Overview of your inventory
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <section
+            id="dashboardSection"
+            class="sp-section"
+        >
+
+
+            <!-- Header -->
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Operations Command Center
+                    </div>
+
+                    <h1>
+                        Good morning 👋
+                    </h1>
+
+                    <p>
+                        Understand what needs attention across
+                        inventory, suppliers, and purchase orders.
                     </p>
 
                 </div>
 
 
-                <!-- Statistics -->
+                <div class="sp-page-actions">
 
-                <div class="row mb-4">
+                    <button
+                        class="sp-secondary-button"
+                        type="button"
+                        data-refresh-dashboard
+                    >
+
+                        <i class="bi bi-arrow-clockwise"></i>
+
+                        Refresh
+
+                    </button>
 
 
-                    <!-- Total Products -->
+                    <button
+                        class="sp-primary-button"
+                        type="button"
+                        onclick="openAddProductModal()"
+                    >
 
-                    <div class="col-md-4">
+                        <i class="bi bi-plus-lg"></i>
 
-                        <div class="card shadow-sm">
+                        Add Product
 
-                            <div class="card-body">
+                    </button>
 
-                                <h6 class="text-muted">
-                                    Total Products
-                                </h6>
+                </div>
 
-                                <h2 id="totalProducts">
-                                    0
-                                </h2>
+            </div>
 
-                            </div>
 
+
+            <!-- =================================================
+                 KPI GRID
+            ================================================== -->
+
+            <div class="sp-kpi-grid">
+
+
+                <!-- Inventory Value -->
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon blue">
+                            <i class="bi bi-box-seam"></i>
                         </div>
+
+                        <span>
+                            Inventory Value
+                        </span>
 
                     </div>
 
 
-                    <!-- Low Stock -->
-
-                    <div class="col-md-4">
-
-                        <div class="card shadow-sm">
-
-                            <div class="card-body">
-
-                                <h6 class="text-muted">
-                                    Low Stock
-                                </h6>
-
-                                <h2 id="lowStockProducts">
-                                    0
-                                </h2>
-
-                            </div>
-
-                        </div>
-
+                    <div
+                        id="inventoryValue"
+                        class="sp-kpi-value"
+                    >
+                        ₹0
                     </div>
 
 
-                    <!-- Status -->
-
-                    <div class="col-md-4">
-
-                        <div class="card shadow-sm">
-
-                            <div class="card-body">
-
-                                <h6 class="text-muted">
-                                    Inventory Status
-                                </h6>
-
-                                <h2>
-                                    Active
-                                </h2>
-
-                            </div>
-
-                        </div>
-
+                    <div class="sp-kpi-description">
+                        Current stock valuation
                     </div>
 
                 </div>
 
 
-                <!-- Dashboard Product Preview -->
 
-                <div class="card shadow-sm">
+                <!-- Total Products -->
 
-                    <div class="card-body">
+                <div class="sp-kpi-card">
 
-                        <h4 class="mb-3">
-                            Recent Products
-                        </h4>
+                    <div class="sp-kpi-top">
 
-                        <p class="text-muted">
-                            Use the Products section to manage your inventory.
-                        </p>
+                        <div class="sp-kpi-icon purple">
+                            <i class="bi bi-grid"></i>
+                        </div>
+
+                        <span>
+                            Total Products
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="totalProducts"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+
+                    <div class="sp-kpi-description">
+                        Active inventory items
+                    </div>
+
+                </div>
+
+
+
+                <!-- Low Stock -->
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon amber">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+
+                        <span>
+                            Low Stock
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="lowStockProducts"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+
+                    <div class="sp-kpi-description warning-text">
+                        Products requiring attention
+                    </div>
+
+                </div>
+
+
+
+                <!-- Inventory Health -->
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon green">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+
+                        <span>
+                            Inventory Health
+                        </span>
+
+                    </div>
+
+
+                    <div class="sp-kpi-value">
+
+                        <span id="inventoryHealth">
+                            0
+                        </span>
+
+                        <small>
+                            / 100
+                        </small>
+
+                    </div>
+
+
+                    <div class="sp-kpi-description">
+                        Current inventory health
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 HEALTH + ACTION CENTER
+            ================================================== -->
+
+            <div class="sp-two-column-grid">
+
+
+                <!-- Inventory Health -->
+
+                <div class="sp-panel sp-health-panel">
+
+                    <div class="sp-panel-header">
+
+                        <div>
+
+                            <div class="sp-panel-eyebrow">
+                                Inventory Health
+                            </div>
+
+                            <h2>
+                                Portfolio health
+                            </h2>
+
+                        </div>
+
 
                         <button
-                            class="btn btn-primary"
-                            onclick="showSection('products')"
+                            class="sp-more-button"
+                            type="button"
                         >
-                            View Products
+                            <i class="bi bi-three-dots"></i>
                         </button>
 
                     </div>
 
+
+                    <div class="sp-health-content">
+
+
+                        <div class="sp-health-score">
+
+                            <div class="sp-health-ring">
+
+                                <div
+                                    id="dashboardHealthRing"
+                                    class="sp-health-ring-progress"
+                                ></div>
+
+                                <div class="sp-health-ring-inner">
+
+                                    <strong
+                                        id="dashboardHealthLabel"
+                                    >
+                                        0%
+                                    </strong>
+
+                                    <span>
+                                        health
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="sp-health-summary">
+
+                            <div
+                                id="dashboardHealthStatus"
+                                class="sp-health-status"
+                            >
+                                Calculating...
+                            </div>
+
+                            <p>
+                                Inventory health is based on current
+                                stock availability and stockout exposure.
+                            </p>
+
+
+                            <div class="sp-health-progress">
+
+                                <div
+                                    id="dashboardHealthProgress"
+                                    class="sp-health-progress-bar"
+                                    style="width:0%"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="sp-health-breakdown">
+
+
+                        <div class="sp-health-stat">
+
+                            <span>
+                                Healthy
+                            </span>
+
+                            <strong
+                                id="healthyStockCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sp-health-stat">
+
+                            <span>
+                                Low stock
+                            </span>
+
+                            <strong
+                                id="statusLowStockCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sp-health-stat">
+
+                            <span>
+                                Stockout risk
+                            </span>
+
+                            <strong
+                                id="stockoutRiskCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Action Center -->
+
+                <div class="sp-panel">
+
+                    <div class="sp-panel-header">
+
+                        <div>
+
+                            <div class="sp-panel-eyebrow">
+                                Action Center
+                            </div>
+
+                            <h2>
+                                What needs attention
+                            </h2>
+
+                        </div>
+
+
+                        <span class="sp-live-badge">
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="attentionCenter"
+                        class="sp-attention-list"
+                    >
+
+                        <div class="sp-empty-state">
+                            Loading inventory actions...
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
 
 
-            <!-- ========================= -->
-            <!-- PRODUCTS SECTION -->
-            <!-- ========================= -->
 
-            <div
-                id="productsSection"
-                class="content-section d-none"
-            >
+            <!-- =================================================
+                 CHARTS
+            ================================================== -->
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="sp-chart-grid">
+
+
+                <!-- Inventory Value -->
+
+                <div class="sp-panel sp-chart-panel">
+
+                    <div class="sp-panel-header">
+
+                        <div>
+
+                            <div class="sp-panel-eyebrow">
+                                Inventory Value
+                            </div>
+
+                            <h2>
+                                Inventory valuation
+                            </h2>
+
+                        </div>
+
+                        <span class="sp-chart-period">
+                            Current
+                        </span>
+
+                    </div>
+
+
+                    <div class="sp-chart-container">
+
+                        <canvas
+                            id="inventoryValueChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Health Distribution -->
+
+                <div class="sp-panel sp-chart-panel">
+
+                    <div class="sp-panel-header">
+
+                        <div>
+
+                            <div class="sp-panel-eyebrow">
+                                Health Distribution
+                            </div>
+
+                            <h2>
+                                Inventory health
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sp-chart-container">
+
+                        <canvas
+                            id="inventoryHealthChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Stock Coverage -->
+
+                <div class="sp-panel sp-chart-panel">
+
+                    <div class="sp-panel-header">
+
+                        <div>
+
+                            <div class="sp-panel-eyebrow">
+                                Stock Coverage
+                            </div>
+
+                            <h2>
+                                Days remaining
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sp-chart-container">
+
+                        <canvas
+                            id="stockCoverageChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PRODUCT OVERVIEW
+            ================================================== -->
+
+            <div class="sp-panel">
+
+                <div class="sp-panel-header">
 
                     <div>
 
+                        <div class="sp-panel-eyebrow">
+                            Inventory Overview
+                        </div>
+
                         <h2>
-                            Products
+                            Product status
                         </h2>
 
-                        <p class="text-muted">
-                            Manage your inventory products
+                        <p class="sp-panel-description">
+                            Current inventory position across your catalog.
                         </p>
 
                     </div>
 
 
                     <button
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#productModal"
-                        onclick="openAddProductModal()"
+                        type="button"
+                        class="sp-text-button"
+                        onclick="showSection('products')"
                     >
-                        + Add Product
+                        View all
+                        <i class="bi bi-arrow-up-right"></i>
                     </button>
 
                 </div>
 
 
-                <!-- Search -->
+                <div class="sp-table-wrapper">
 
-                <div class="row mb-3">
+                    <table class="sp-table">
 
-                    <div class="col-md-6">
+                        <thead>
 
-                        <input
-                            type="text"
-                            id="searchInput"
-                            class="form-control"
-                            placeholder="Search by name or SKU..."
-                            onkeyup="searchProducts()"
+                            <tr>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Value
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="dashboardProductTableBody"
                         >
 
-                    </div>
+                            <tr>
 
-                </div>
+                                <td
+                                    colspan="6"
+                                    class="sp-table-empty"
+                                >
+                                    Loading products...
+                                </td>
 
+                            </tr>
 
-                <!-- Product Table -->
+                        </tbody>
 
-                <div class="card shadow-sm">
-
-                    <div class="card-body">
-
-                        <div class="table-responsive">
-
-                            <table class="table table-hover">
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>SKU</th>
-                                        <th>Category</th>
-                                        <th>Supplier</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-
-                                    </tr>
-
-                                </thead>
-
-
-                                <tbody id="productTableBody">
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
+                    </table>
 
                 </div>
 
             </div>
 
 
-            <!-- ========================= -->
-            <!-- CATEGORIES SECTION -->
-            <!-- ========================= -->
 
-            <div
-                id="categoriesSection"
-                class="content-section d-none"
-            >
+            <!-- =================================================
+                 INVENTORY INTELLIGENCE
+            ================================================== -->
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="sp-panel">
+
+
+                <div class="sp-panel-header">
 
                     <div>
 
+                        <div class="sp-panel-eyebrow">
+                            Inventory Intelligence
+                        </div>
+
                         <h2>
-                            Categories
+                            Replenishment intelligence
                         </h2>
 
-                        <p class="text-muted">
-                            Manage product categories
+                        <p class="sp-panel-description">
+                            Demand velocity, stock coverage, risk,
+                            and recommended operational action.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Intelligence summary -->
+
+                <div class="sp-intelligence-summary">
+
+
+                    <div class="sp-intelligence-stat">
+
+                        <span>
+                            Products analysed
+                        </span>
+
+                        <strong
+                            id="intelligenceProductsCount"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="sp-intelligence-stat">
+
+                        <span>
+                            High risk
+                        </span>
+
+                        <strong
+                            id="intelligenceRiskCount"
+                            class="danger-number"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="sp-intelligence-stat">
+
+                        <span>
+                            Reorder actions
+                        </span>
+
+                        <strong
+                            id="intelligenceReorderCount"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-table-wrapper">
+
+                    <table class="sp-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    Stock
+                                </th>
+
+                                <th>
+                                    Daily Demand
+                                </th>
+
+                                <th>
+                                    Coverage
+                                </th>
+
+                                <th>
+                                    Risk
+                                </th>
+
+                                <th>
+                                    Recommended Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="inventoryIntelligenceTableBody"
+                        >
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="sp-table-empty"
+                                >
+                                    Loading intelligence...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUPPLIER SNAPSHOT
+            ================================================== -->
+
+            <div class="sp-panel">
+
+
+                <div class="sp-panel-header">
+
+                    <div>
+
+                        <div class="sp-panel-eyebrow">
+                            Supplier Intelligence
+                        </div>
+
+                        <h2>
+                            Supplier network
+                        </h2>
+
+                        <p class="sp-panel-description">
+                            Supplier reliability can directly affect
+                            replenishment and stockout risk.
                         </p>
 
                     </div>
 
 
                     <button
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#categoryModal"
-                        onclick="openAddCategoryModal()"
+                        type="button"
+                        class="sp-text-button"
+                        onclick="showSection('supplierIntelligence')"
                     >
-                        + Add Category
+                        View supplier health
+                        <i class="bi bi-arrow-right"></i>
                     </button>
 
                 </div>
 
 
-                <div class="card shadow-sm">
 
-                    <div class="card-body">
-
-                        <div class="table-responsive">
-
-                            <table class="table table-hover">
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Actions</th>
-
-                                    </tr>
-
-                                </thead>
+                <div class="sp-supplier-summary">
 
 
-                                <tbody id="categoryTableBody">
+                    <div class="sp-supplier-stat">
 
-                                </tbody>
+                        <div class="sp-supplier-stat-icon blue">
+                            <i class="bi bi-truck"></i>
+                        </div>
 
-                            </table>
+                        <div>
+
+                            <span>
+                                Suppliers analysed
+                            </span>
+
+                            <strong
+                                id="dashboardSupplierTotalCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sp-supplier-stat">
+
+                        <div class="sp-supplier-stat-icon green">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Healthy
+                            </span>
+
+                            <strong
+                                id="dashboardSupplierHealthyCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sp-supplier-stat">
+
+                        <div class="sp-supplier-stat-icon red">
+                            <i class="bi bi-exclamation-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                At risk
+                            </span>
+
+                            <strong
+                                id="dashboardSupplierRiskCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sp-supplier-stat">
+
+                        <div class="sp-supplier-stat-icon purple">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Avg health
+                            </span>
+
+                            <strong>
+
+                                <span
+                                    id="dashboardSupplierAverageHealth"
+                                >
+                                    0
+                                </span>
+
+                                <small>
+                                    /100
+                                </small>
+
+                            </strong>
 
                         </div>
 
@@ -425,187 +1263,1105 @@
             </div>
 
 
-            <!-- ========================= -->
-            <!-- SUPPLIERS SECTION -->
-            <!-- ========================= -->
 
-            <div
-                id="suppliersSection"
-                class="content-section d-none"
-            >
+            <!-- =================================================
+                 PURCHASE ORDER SNAPSHOT
+            ================================================== -->
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="sp-panel">
+
+
+                <div class="sp-panel-header">
 
                     <div>
 
+                        <div class="sp-panel-eyebrow">
+                            Procurement
+                        </div>
+
                         <h2>
-                            Suppliers
+                            Purchase orders
                         </h2>
 
-                        <p class="text-muted">
-                            Manage product suppliers
+                        <p class="sp-panel-description">
+                            Track inbound inventory and procurement progress.
                         </p>
 
                     </div>
 
 
                     <button
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#supplierModal"
+                        type="button"
+                        class="sp-primary-button sp-small-button"
+                        onclick="openCreatePurchaseOrderModal()"
                     >
-                        + Add Supplier
+
+                        <i class="bi bi-plus-lg"></i>
+
+                        New PO
+
                     </button>
 
                 </div>
 
 
-                <div class="card shadow-sm">
 
-                    <div class="card-body">
+                <div class="sp-table-wrapper">
 
-                        <div class="table-responsive">
+                    <table class="sp-table">
 
-                            <table class="table table-hover">
+                        <thead>
 
-                                <thead>
+                            <tr>
 
-                                    <tr>
+                                <th>
+                                    Order
+                                </th>
 
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Address</th>
-                                        <th>Actions</th>
+                                <th>
+                                    Supplier
+                                </th>
 
-                                    </tr>
+                                <th>
+                                    Expected
+                                </th>
 
-                                </thead>
+                                <th>
+                                    Value
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
 
 
-                                <tbody id="supplierTableBody">
+                        <tbody
+                            id="dashboardPurchaseOrderTableBody"
+                        >
 
-                                </tbody>
+                            <tr>
 
-                            </table>
+                                <td
+                                    colspan="5"
+                                    class="sp-table-empty"
+                                >
+                                    Loading purchase orders...
+                                </td>
 
-                        </div>
+                            </tr>
 
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
+
+        <section
+            id="productsSection"
+            class="sp-section"
+            style="display:none;"
+        >
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Inventory
                     </div>
+
+                    <h1>
+                        Products
+                    </h1>
+
+                    <p>
+                        Manage products, stock levels, pricing,
+                        categories, and suppliers.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="sp-primary-button"
+                    type="button"
+                    onclick="openAddProductModal()"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Add Product
+
+                </button>
+
+            </div>
+
+
+
+            <div class="sp-toolbar">
+
+                <div class="sp-search">
+
+                    <i class="bi bi-search"></i>
+
+                    <input
+                        id="searchInput"
+                        type="text"
+                        placeholder="Search products, SKU, category..."
+                    >
 
                 </div>
 
             </div>
 
 
-            <!-- ========================= -->
-            <!-- STOCK MOVEMENTS SECTION -->
-            <!-- ========================= -->
 
-            <div
-                id="movementsSection"
-                class="content-section d-none"
-            >
+            <div class="sp-panel">
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="sp-table-wrapper">
+
+                    <table class="sp-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Supplier
+                                </th>
+
+                                <th>
+                                    Price
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-end">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="productTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CATEGORIES
+        ================================================== -->
+
+        <section
+            id="categoriesSection"
+            class="sp-section"
+            style="display:none;"
+        >
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Inventory
+                    </div>
+
+                    <h1>
+                        Categories
+                    </h1>
+
+                    <p>
+                        Organize products for cleaner inventory analysis.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="sp-primary-button"
+                    type="button"
+                    onclick="openAddCategoryModal()"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Add Category
+
+                </button>
+
+            </div>
+
+
+
+            <div class="sp-panel">
+
+                <div class="sp-panel-header">
 
                     <div>
 
+                        <div class="sp-panel-eyebrow">
+                            Product Taxonomy
+                        </div>
+
                         <h2>
-                            Stock Movements
+                            Product categories
                         </h2>
 
-                        <p class="text-muted">
-                            Track stock coming in and going out
-                        </p>
-
                     </div>
-
-
-                    <button
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#movementModal"
-                    >
-                        + Stock Movement
-                    </button>
 
                 </div>
 
 
-                <div class="card shadow-sm">
+                <div class="sp-table-wrapper">
 
-                    <div class="card-body">
+                    <table class="sp-table">
 
-                        <div class="table-responsive">
+                        <thead>
 
-                            <table class="table table-hover">
+                            <tr>
 
-                                <thead>
+                                <th>
+                                    Name
+                                </th>
 
-                                    <tr>
+                                <th>
+                                    Description
+                                </th>
 
-                                        <th>ID</th>
-                                        <th>Product</th>
-                                        <th>Type</th>
-                                        <th>Quantity</th>
-                                        <th>Reason</th>
-                                        <th>Date</th>
+                                <th>
+                                    Products
+                                </th>
 
-                                    </tr>
+                                <th class="text-end">
+                                    Actions
+                                </th>
 
-                                </thead>
+                            </tr>
+
+                        </thead>
 
 
-                                <tbody id="movementTableBody">
+                        <tbody
+                            id="categoryTableBody"
+                        ></tbody>
 
-                                </tbody>
+                    </table>
 
-                            </table>
+                </div>
 
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SUPPLIERS
+        ================================================== -->
+
+        <section
+            id="suppliersSection"
+            class="sp-section"
+            style="display:none;"
+        >
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Operations
+                    </div>
+
+                    <h1>
+                        Suppliers
+                    </h1>
+
+                    <p>
+                        Manage your supplier network and procurement partners.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="sp-primary-button"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#supplierModal"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Add Supplier
+
+                </button>
+
+            </div>
+
+
+
+            <div class="sp-panel">
+
+                <div class="sp-table-wrapper">
+
+                    <table class="sp-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Supplier
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Phone
+                                </th>
+
+                                <th>
+                                    Address
+                                </th>
+
+                                <th>
+                                    Created
+                                </th>
+
+                                <th class="text-end">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="supplierTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SUPPLIER INTELLIGENCE
+        ================================================== -->
+
+        <section
+            id="supplierIntelligenceSection"
+            class="sp-section"
+            style="display:none;"
+        >
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Intelligence
+                    </div>
+
+                    <h1>
+                        Supplier Health
+                    </h1>
+
+                    <p>
+                        Measure supplier reliability and its impact
+                        on inventory operations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Supplier KPIs -->
+
+            <div class="sp-kpi-grid">
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon blue">
+                            <i class="bi bi-truck"></i>
                         </div>
 
+                        <span>
+                            Suppliers Analysed
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="supplierTotalCount"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sp-kpi-description">
+                        Active supplier network
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon green">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+
+                        <span>
+                            Healthy Suppliers
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="supplierHealthyCount"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sp-kpi-description">
+                        Low operational risk
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon amber">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+
+                        <span>
+                            At Risk
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="supplierRiskCount"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sp-kpi-description warning-text">
+                        Suppliers requiring review
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon purple">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <span>
+                            Average Health
+                        </span>
+
+                    </div>
+
+
+                    <div class="sp-kpi-value">
+
+                        <span
+                            id="supplierAverageHealth"
+                        >
+                            0
+                        </span>
+
+                        <small>
+                            /100
+                        </small>
+
+                    </div>
+
+                    <div class="sp-kpi-description">
+                        Supplier network health
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
 
-    </div>
+
+            <!-- Supplier Attention -->
+
+            <div class="sp-panel">
+
+                <div class="sp-panel-header">
+
+                    <div>
+
+                        <div class="sp-panel-eyebrow">
+                            Supplier Attention
+                        </div>
+
+                        <h2>
+                            Suppliers requiring attention
+                        </h2>
+
+                    </div>
+
+                    <span class="sp-live-badge">
+                        LIVE
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="supplierAttentionCenter"
+                    class="sp-attention-list"
+                ></div>
+
+            </div>
+
+
+
+            <!-- Supplier table -->
+
+            <div class="sp-panel">
+
+                <div class="sp-panel-header">
+
+                    <div>
+
+                        <div class="sp-panel-eyebrow">
+                            Supplier Performance
+                        </div>
+
+                        <h2>
+                            Reliability overview
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sp-table-wrapper">
+
+                    <table class="sp-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Supplier
+                                </th>
+
+                                <th>
+                                    Health
+                                </th>
+
+                                <th>
+                                    On-time
+                                </th>
+
+                                <th>
+                                    Avg Lead Time
+                                </th>
+
+                                <th>
+                                    Fulfillment
+                                </th>
+
+                                <th>
+                                    Risk
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="supplierPerformanceTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STOCK MOVEMENTS
+        ================================================== -->
+
+        <section
+            id="movementsSection"
+            class="sp-section"
+            style="display:none;"
+        >
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Inventory
+                    </div>
+
+                    <h1>
+                        Stock Movements
+                    </h1>
+
+                    <p>
+                        Track inventory entering and leaving the business.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="sp-primary-button"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#movementModal"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Record Movement
+
+                </button>
+
+            </div>
+
+
+
+            <div class="sp-panel">
+
+                <div class="sp-table-wrapper">
+
+                    <table class="sp-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    Type
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Reason
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="movementTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PURCHASE ORDERS
+        ================================================== -->
+
+        <section
+            id="purchaseOrdersSection"
+            class="sp-section"
+            style="display:none;"
+        >
+
+            <div class="sp-page-header">
+
+                <div>
+
+                    <div class="sp-eyebrow">
+                        Operations
+                    </div>
+
+                    <h1>
+                        Purchase Orders
+                    </h1>
+
+                    <p>
+                        Manage inbound inventory, supplier orders,
+                        fulfillment, and delivery timelines.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="sp-primary-button"
+                    type="button"
+                    onclick="openCreatePurchaseOrderModal()"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Create Purchase Order
+
+                </button>
+
+            </div>
+
+
+
+            <!-- PO KPI grid -->
+
+            <div class="sp-kpi-grid">
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon blue">
+                            <i class="bi bi-arrow-down-circle"></i>
+                        </div>
+
+                        <span>
+                            Open Orders
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="purchaseOrdersOpenCount"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sp-kpi-description">
+                        Pending and partial orders
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon red">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+
+                        <span>
+                            Overdue
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="purchaseOrdersOverdueCount"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sp-kpi-description warning-text">
+                        Delivery date exceeded
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon amber">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+
+                        <span>
+                            Partial
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="purchaseOrdersPartialCount"
+                        class="sp-kpi-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="sp-kpi-description">
+                        Orders awaiting completion
+                    </div>
+
+                </div>
+
+
+
+                <div class="sp-kpi-card">
+
+                    <div class="sp-kpi-top">
+
+                        <div class="sp-kpi-icon purple">
+                            <i class="bi bi-currency-rupee"></i>
+                        </div>
+
+                        <span>
+                            PO Value
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="purchaseOrdersValue"
+                        class="sp-kpi-value"
+                    >
+                        ₹0
+                    </div>
+
+                    <div class="sp-kpi-description">
+                        Total procurement value
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PO table -->
+
+            <div class="sp-panel">
+
+                <div class="sp-panel-header">
+
+                    <div>
+
+                        <div class="sp-panel-eyebrow">
+                            Procurement Pipeline
+                        </div>
+
+                        <h2>
+                            Purchase order workspace
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sp-table-wrapper">
+
+                    <table class="sp-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Order
+                                </th>
+
+                                <th>
+                                    Supplier
+                                </th>
+
+                                <th>
+                                    Ordered
+                                </th>
+
+                                <th>
+                                    Received
+                                </th>
+
+                                <th>
+                                    Fulfillment
+                                </th>
+
+                                <th>
+                                    Value
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Expected
+                                </th>
+
+                                <th class="text-end">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="purchaseOrderTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- PRODUCT MODAL -->
-<!-- ========================= -->
+
+<!-- =========================================================
+     PRODUCT MODAL
+========================================================= -->
 
 <div
     class="modal fade"
     id="productModal"
     tabindex="-1"
+    aria-hidden="true"
 >
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
 
-        <div class="modal-content">
-
+        <div class="modal-content sp-modal">
 
             <div class="modal-header">
 
-                <h5
-                    class="modal-title"
-                    id="productModalTitle"
-                >
-                    Add Product
-                </h5>
+                <div>
+
+                    <div class="sp-modal-eyebrow">
+                        Inventory
+                    </div>
+
+                    <h5
+                        id="productModalTitle"
+                        class="modal-title"
+                    >
+                        Add Product
+                    </h5>
+
+                </div>
+
 
                 <button
                     type="button"
-                    class="btn-close"
+                    class="btn-close btn-close-white"
                     data-bs-dismiss="modal"
                 ></button>
 
@@ -614,158 +2370,167 @@
 
             <div class="modal-body">
 
+                <div
+                    id="productError"
+                    class="sp-form-error"
+                    style="display:none;"
+                ></div>
+
+
                 <form id="productForm">
 
                     <input
-                        type="hidden"
                         id="productId"
+                        type="hidden"
                     >
 
 
-                    <div class="mb-3">
+                    <div class="row g-3">
 
-                        <label class="form-label">
-                            Product Name
-                        </label>
 
-                        <input
-                            type="text"
-                            id="productName"
-                            class="form-control"
-                            required
-                        >
+                        <div class="col-md-6">
+
+                            <label class="sp-form-label">
+                                Product Name
+                            </label>
+
+                            <input
+                                id="productName"
+                                class="form-control"
+                                type="text"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label class="sp-form-label">
+                                SKU
+                            </label>
+
+                            <input
+                                id="productSku"
+                                class="form-control"
+                                type="text"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-12">
+
+                            <label class="sp-form-label">
+                                Description
+                            </label>
+
+                            <textarea
+                                id="productDescription"
+                                class="form-control"
+                                rows="3"
+                            ></textarea>
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Price
+                            </label>
+
+                            <input
+                                id="productPrice"
+                                class="form-control"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Quantity
+                            </label>
+
+                            <input
+                                id="productQuantity"
+                                class="form-control"
+                                type="number"
+                                min="0"
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Low Stock Threshold
+                            </label>
+
+                            <input
+                                id="productThreshold"
+                                class="form-control"
+                                type="number"
+                                min="0"
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label class="sp-form-label">
+                                Category
+                            </label>
+
+                            <select
+                                id="productCategory"
+                                class="form-select"
+                            >
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <label class="sp-form-label">
+                                Supplier
+                            </label>
+
+                            <select
+                                id="productSupplier"
+                                class="form-select"
+                            >
+
+                                <option value="">
+                                    No supplier
+                                </option>
+
+                            </select>
+
+                        </div>
 
                     </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            SKU
-                        </label>
-
-                        <input
-                            type="text"
-                            id="productSku"
-                            class="form-control"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Description
-                        </label>
-
-                        <textarea
-                            id="productDescription"
-                            class="form-control"
-                        ></textarea>
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Price
-                        </label>
-
-                        <input
-                            type="number"
-                            id="productPrice"
-                            class="form-control"
-                            step="0.01"
-                            min="0.01"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Quantity
-                        </label>
-
-                        <input
-                            type="number"
-                            id="productQuantity"
-                            class="form-control"
-                            min="0"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Low Stock Threshold
-                        </label>
-
-                        <input
-                            type="number"
-                            id="productThreshold"
-                            class="form-control"
-                            min="0"
-                            value="5"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Category
-                        </label>
-
-                        <select
-                            id="productCategory"
-                            class="form-select"
-                            required
-                        >
-
-                            <option value="">
-                                Select category
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Supplier
-                        </label>
-
-                        <select
-                            id="productSupplier"
-                            class="form-select"
-                        >
-
-                            <option value="">
-                                No supplier
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div
-                        id="productError"
-                        class="alert alert-danger d-none"
-                    ></div>
 
                 </form>
 
@@ -776,7 +2541,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="sp-secondary-button"
                     data-bs-dismiss="modal"
                 >
                     Cancel
@@ -785,10 +2550,12 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="sp-primary-button"
                     onclick="saveProduct()"
                 >
+
                     Save Product
+
                 </button>
 
             </div>
@@ -800,33 +2567,40 @@
 </div>
 
 
-<!-- ========================= -->
-<!-- CATEGORY MODAL -->
-<!-- ========================= -->
+
+<!-- =========================================================
+     CATEGORY MODAL
+========================================================= -->
 
 <div
     class="modal fade"
     id="categoryModal"
     tabindex="-1"
+    aria-hidden="true"
 >
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content">
-
+        <div class="modal-content sp-modal">
 
             <div class="modal-header">
 
-                <h5
-                    class="modal-title"
-                    id="categoryModalTitle"
-                >
-                    Add Category
-                </h5>
+                <div>
+
+                    <div class="sp-modal-eyebrow">
+                        Inventory
+                    </div>
+
+                    <h5 class="modal-title">
+                        Add Category
+                    </h5>
+
+                </div>
+
 
                 <button
                     type="button"
-                    class="btn-close"
+                    class="btn-close btn-close-white"
                     data-bs-dismiss="modal"
                 ></button>
 
@@ -835,43 +2609,44 @@
 
             <div class="modal-body">
 
-                <form id="categoryForm">
+                <div
+                    id="categoryError"
+                    class="sp-form-error"
+                    style="display:none;"
+                ></div>
 
+
+                <form id="categoryForm">
 
                     <div class="mb-3">
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Category Name
                         </label>
 
                         <input
-                            type="text"
                             id="categoryName"
                             class="form-control"
+                            type="text"
                             required
                         >
 
                     </div>
 
 
-                    <div class="mb-3">
+                    <div>
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Description
                         </label>
 
                         <textarea
                             id="categoryDescription"
                             class="form-control"
+                            rows="4"
                         ></textarea>
 
                     </div>
-
-
-                    <div
-                        id="categoryError"
-                        class="alert alert-danger d-none"
-                    ></div>
 
                 </form>
 
@@ -882,7 +2657,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="sp-secondary-button"
                     data-bs-dismiss="modal"
                 >
                     Cancel
@@ -891,7 +2666,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="sp-primary-button"
                     onclick="saveCategory()"
                 >
                     Save Category
@@ -906,30 +2681,40 @@
 </div>
 
 
-<!-- ========================= -->
-<!-- SUPPLIER MODAL -->
-<!-- ========================= -->
+
+<!-- =========================================================
+     SUPPLIER MODAL
+========================================================= -->
 
 <div
     class="modal fade"
     id="supplierModal"
     tabindex="-1"
+    aria-hidden="true"
 >
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content">
-
+        <div class="modal-content sp-modal">
 
             <div class="modal-header">
 
-                <h5 class="modal-title">
-                    Add Supplier
-                </h5>
+                <div>
+
+                    <div class="sp-modal-eyebrow">
+                        Operations
+                    </div>
+
+                    <h5 class="modal-title">
+                        Add Supplier
+                    </h5>
+
+                </div>
+
 
                 <button
                     type="button"
-                    class="btn-close"
+                    class="btn-close btn-close-white"
                     data-bs-dismiss="modal"
                 ></button>
 
@@ -938,19 +2723,25 @@
 
             <div class="modal-body">
 
-                <form id="supplierForm">
+                <div
+                    id="supplierError"
+                    class="sp-form-error"
+                    style="display:none;"
+                ></div>
 
+
+                <form id="supplierForm">
 
                     <div class="mb-3">
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Supplier Name
                         </label>
 
                         <input
-                            type="text"
                             id="supplierName"
                             class="form-control"
+                            type="text"
                             required
                         >
 
@@ -959,14 +2750,14 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Email
                         </label>
 
                         <input
-                            type="email"
                             id="supplierEmail"
                             class="form-control"
+                            type="email"
                         >
 
                     </div>
@@ -974,37 +2765,32 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Phone
                         </label>
 
                         <input
-                            type="text"
                             id="supplierPhone"
                             class="form-control"
+                            type="text"
                         >
 
                     </div>
 
 
-                    <div class="mb-3">
+                    <div>
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Address
                         </label>
 
                         <textarea
                             id="supplierAddress"
                             class="form-control"
+                            rows="3"
                         ></textarea>
 
                     </div>
-
-
-                    <div
-                        id="supplierError"
-                        class="alert alert-danger d-none"
-                    ></div>
 
                 </form>
 
@@ -1015,7 +2801,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="sp-secondary-button"
                     data-bs-dismiss="modal"
                 >
                     Cancel
@@ -1024,7 +2810,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="sp-primary-button"
                     onclick="saveSupplier()"
                 >
                     Save Supplier
@@ -1039,30 +2825,40 @@
 </div>
 
 
-<!-- ========================= -->
-<!-- STOCK MOVEMENT MODAL -->
-<!-- ========================= -->
+
+<!-- =========================================================
+     STOCK MOVEMENT MODAL
+========================================================= -->
 
 <div
     class="modal fade"
     id="movementModal"
     tabindex="-1"
+    aria-hidden="true"
 >
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content">
-
+        <div class="modal-content sp-modal">
 
             <div class="modal-header">
 
-                <h5 class="modal-title">
-                    Stock Movement
-                </h5>
+                <div>
+
+                    <div class="sp-modal-eyebrow">
+                        Inventory
+                    </div>
+
+                    <h5 class="modal-title">
+                        Record Stock Movement
+                    </h5>
+
+                </div>
+
 
                 <button
                     type="button"
-                    class="btn-close"
+                    class="btn-close btn-close-white"
                     data-bs-dismiss="modal"
                 ></button>
 
@@ -1071,12 +2867,19 @@
 
             <div class="modal-body">
 
+                <div
+                    id="movementError"
+                    class="sp-form-error"
+                    style="display:none;"
+                ></div>
+
+
                 <form id="movementForm">
 
 
                     <div class="mb-3">
 
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Product
                         </label>
 
@@ -1095,72 +2898,74 @@
                     </div>
 
 
-                    <div class="mb-3">
 
-                        <label class="form-label">
-                            Movement Type
-                        </label>
+                    <div class="row g-3 mb-3">
 
-                        <select
-                            id="movementType"
-                            class="form-select"
-                            required
-                        >
 
-                            <option value="">
-                                Select type
-                            </option>
+                        <div class="col-6">
 
-                            <option value="IN">
-                                Stock In
-                            </option>
+                            <label class="sp-form-label">
+                                Movement Type
+                            </label>
 
-                            <option value="OUT">
-                                Stock Out
-                            </option>
+                            <select
+                                id="movementType"
+                                class="form-select"
+                                required
+                            >
 
-                        </select>
+                                <option value="">
+                                    Select type
+                                </option>
+
+                                <option value="IN">
+                                    Stock In
+                                </option>
+
+                                <option value="OUT">
+                                    Stock Out
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="col-6">
+
+                            <label class="sp-form-label">
+                                Quantity
+                            </label>
+
+                            <input
+                                id="movementQuantity"
+                                class="form-control"
+                                type="number"
+                                min="1"
+                                required
+                            >
+
+                        </div>
 
                     </div>
 
 
-                    <div class="mb-3">
 
-                        <label class="form-label">
-                            Quantity
-                        </label>
+                    <div>
 
-                        <input
-                            type="number"
-                            id="movementQuantity"
-                            class="form-control"
-                            min="1"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
+                        <label class="sp-form-label">
                             Reason
                         </label>
 
-                        <input
-                            type="text"
+                        <textarea
                             id="movementReason"
                             class="form-control"
-                            placeholder="e.g. New shipment"
-                        >
+                            rows="3"
+                            placeholder="Sale, purchase receipt, adjustment..."
+                        ></textarea>
 
                     </div>
-
-
-                    <div
-                        id="movementError"
-                        class="alert alert-danger d-none"
-                    ></div>
 
                 </form>
 
@@ -1171,7 +2976,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="sp-secondary-button"
                     data-bs-dismiss="modal"
                 >
                     Cancel
@@ -1180,10 +2985,10 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="sp-primary-button"
                     onclick="saveMovement()"
                 >
-                    Save Movement
+                    Record Movement
                 </button>
 
             </div>
@@ -1195,22 +3000,629 @@
 </div>
 
 
-<!-- ========================= -->
-<!-- BOOTSTRAP -->
-<!-- ========================= -->
+
+<!-- =========================================================
+     PURCHASE ORDER CREATE MODAL
+========================================================= -->
+
+<div
+    class="modal fade"
+    id="purchaseOrderModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+
+        <div class="modal-content sp-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <div class="sp-modal-eyebrow">
+                        Procurement
+                    </div>
+
+                    <h5 class="modal-title">
+                        Create Purchase Order
+                    </h5>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div
+                    id="purchaseOrderError"
+                    class="sp-form-error"
+                    style="display:none;"
+                ></div>
+
+
+                <form id="purchaseOrderForm">
+
+
+                    <!-- PO basics -->
+
+                    <div class="row g-3 mb-4">
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Supplier
+                            </label>
+
+                            <select
+                                id="purchaseOrderSupplier"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select supplier
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Order Number
+                            </label>
+
+                            <input
+                                id="purchaseOrderNumber"
+                                class="form-control"
+                                type="text"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Expected Delivery
+                            </label>
+
+                            <input
+                                id="purchaseOrderExpectedDelivery"
+                                class="form-control"
+                                type="date"
+                            >
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+
+                            <label class="sp-form-label">
+                                Status
+                            </label>
+
+                            <select
+                                id="purchaseOrderStatus"
+                                class="form-select"
+                            >
+
+                                <option value="PENDING">
+                                    Pending
+                                </option>
+
+                                <option value="PARTIAL">
+                                    Partial
+                                </option>
+
+                                <option value="RECEIVED">
+                                    Received
+                                </option>
+
+                                <option value="CANCELLED">
+                                    Cancelled
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="col-md-8">
+
+                            <label class="sp-form-label">
+                                Notes
+                            </label>
+
+                            <input
+                                id="purchaseOrderNotes"
+                                class="form-control"
+                                type="text"
+                                placeholder="Optional procurement notes..."
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Items -->
+
+                    <div class="sp-po-items-header">
+
+                        <div>
+
+                            <div class="sp-modal-eyebrow">
+                                Order Items
+                            </div>
+
+                            <h6>
+                                Products to procure
+                            </h6>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="sp-secondary-button sp-small-button"
+                            onclick="addPurchaseOrderItemRow()"
+                        >
+
+                            <i class="bi bi-plus-lg"></i>
+
+                            Add Item
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div
+                        id="purchaseOrderItems"
+                        class="sp-po-items"
+                    ></div>
+
+
+
+                    <!-- Draft total -->
+
+                    <div class="sp-po-total">
+
+                        <span>
+                            Estimated Order Value
+                        </span>
+
+                        <strong
+                            id="purchaseOrderDraftTotal"
+                        >
+                            ₹0
+                        </strong>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="sp-secondary-button"
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="sp-primary-button"
+                    onclick="savePurchaseOrder()"
+                >
+
+                    <i class="bi bi-check2"></i>
+
+                    Create Purchase Order
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     PURCHASE ORDER DETAIL MODAL
+========================================================= -->
+
+<div
+    class="modal fade"
+    id="purchaseOrderDetailModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+
+        <div class="modal-content sp-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <div class="sp-modal-eyebrow">
+                        Procurement
+                    </div>
+
+                    <h5 class="modal-title">
+                        Purchase Order Details
+                    </h5>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div
+                id="purchaseOrderDetailBody"
+                class="modal-body"
+            >
+
+                <div class="sp-empty-state">
+                    Loading purchase order...
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="sp-secondary-button"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     COPILOT DRAWER
+========================================================= -->
+
+<div
+    id="copilotDrawer"
+    class="sp-copilot-drawer"
+    aria-hidden="true"
+>
+
+    <div class="sp-copilot-header">
+
+        <div class="sp-copilot-title">
+
+            <div class="sp-copilot-icon">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    StockPilot Copilot
+                </strong>
+
+                <span>
+                    Inventory intelligence assistant
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="sp-icon-button"
+            onclick="closeCopilot()"
+        >
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <div class="sp-copilot-body">
+
+        <div class="sp-copilot-welcome">
+
+            <div class="sp-copilot-welcome-icon">
+                ✦
+            </div>
+
+            <h3>
+                Ask about your inventory
+            </h3>
+
+            <p>
+                Get explanations and recommendations based on
+                your inventory, suppliers, and purchase orders.
+            </p>
+
+        </div>
+
+
+
+        <div class="sp-copilot-suggestions">
+
+            <button
+                type="button"
+                onclick="setCopilotPrompt('What should I reorder this week?')"
+            >
+                What should I reorder this week?
+            </button>
+
+
+            <button
+                type="button"
+                onclick="setCopilotPrompt('Which products are at highest risk?')"
+            >
+                Which products are at highest risk?
+            </button>
+
+
+            <button
+                type="button"
+                onclick="setCopilotPrompt('Which purchase orders are overdue?')"
+            >
+                Which purchase orders are overdue?
+            </button>
+
+
+            <button
+                type="button"
+                onclick="setCopilotPrompt('What should operations focus on today?')"
+            >
+                What should operations focus on today?
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="copilotResponse"
+            class="sp-copilot-response"
+        >
+
+            <div class="sp-copilot-placeholder">
+                Copilot responses will appear here.
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="sp-copilot-input">
+
+        <textarea
+            id="copilotInput"
+            rows="2"
+            placeholder="Ask StockPilot..."
+        ></textarea>
+
+
+        <button
+            type="button"
+            onclick="sendCopilotMessage()"
+        >
+
+            <i class="bi bi-arrow-up"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP
+========================================================= -->
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 ></script>
 
 
-<!-- ========================= -->
-<!-- APPLICATION JAVASCRIPT -->
-<!-- ========================= -->
 
-<script src="{% static 'inventory/js/app.js' %}"></script>
+<!-- =========================================================
+     CHART.JS
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+></script>
+
+
+
+<!-- =========================================================
+     COPILOT UI
+========================================================= -->
+
+<!-- Copilot behavior lives in static/inventory/js/app.js. -->
+
+
+<!-- =========================================================
+     STOCKPILOT APP
+========================================================= -->
+
+<script
+    src="{% static 'inventory/js/app.js' %}"
+></script>
+
+
+
+<!-- =========================================================
+     HEALTH RING ENHANCEMENT
+========================================================= -->
+
+<script>
+
+function updateHealthRing() {
+
+    const label =
+        document.getElementById(
+            "dashboardHealthLabel"
+        );
+
+    const ring =
+        document.getElementById(
+            "dashboardHealthRing"
+        );
+
+    const status =
+        document.getElementById(
+            "dashboardHealthStatus"
+        );
+
+
+    if (!label || !ring) {
+        return;
+    }
+
+
+    const raw =
+        parseFloat(
+            label.textContent
+        );
+
+
+    if (
+        !Number.isFinite(raw)
+    ) {
+        return;
+    }
+
+
+    const score =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                raw
+            )
+        );
+
+
+    ring.style.setProperty(
+        "--health-score",
+        `${score * 3.6}deg`
+    );
+
+
+    if (status) {
+
+        if (score >= 90) {
+
+            status.textContent =
+                "Excellent inventory";
+
+        }
+
+        else if (score >= 75) {
+
+            status.textContent =
+                "Healthy inventory";
+
+        }
+
+        else if (score >= 50) {
+
+            status.textContent =
+                "Inventory needs attention";
+
+        }
+
+        else {
+
+            status.textContent =
+                "Critical inventory risk";
+
+        }
+
+    }
+
+}
+
+
+setInterval(
+    updateHealthRing,
+    500
+);
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        setTimeout(
+            updateHealthRing,
+            1000
+        );
+
+    }
+);
+
+</script>
 
 
 </body>
-
 </html>

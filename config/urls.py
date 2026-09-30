@@ -1,39 +1,73 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path, include
+from django.shortcuts import render
 
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
+    SpectacularRedocView,
 )
 
-from inventory.views import (
-    login_page,
-    dashboard_page,
-)
 
+# =====================================================
+# STOCKPILOT FRONTEND VIEWS
+# =====================================================
+
+def login_page(request):
+    return render(
+        request,
+        "inventory/login.html"
+    )
+
+
+def dashboard_page(request):
+    return render(
+        request,
+        "inventory/dashboard.html"
+    )
+
+
+# =====================================================
+# URL PATTERNS
+# =====================================================
 
 urlpatterns = [
 
-    # Django Admin
+    # =================================================
+    # ADMIN
+    # =================================================
+
     path(
         "admin/",
-        admin.site.urls
+        admin.site.urls,
+        name="admin",
     ),
 
 
-    # Inventory API
+    # =================================================
+    # API
+    # =================================================
+
     path(
         "api/",
-        include("inventory.urls")
+        include("inventory.urls"),
     ),
 
 
-    # Swagger / OpenAPI
+    # =================================================
+    # API SCHEMA
+    # =================================================
+
     path(
         "api/schema/",
         SpectacularAPIView.as_view(),
         name="schema",
     ),
+
+
+    # =================================================
+    # SWAGGER
+    # =================================================
 
     path(
         "api/docs/",
@@ -44,14 +78,48 @@ urlpatterns = [
     ),
 
 
-    # Frontend pages
+    # =================================================
+    # REDOC
+    # =================================================
+
+    path(
+        "api/redoc/",
+        SpectacularRedocView.as_view(
+            url_name="schema"
+        ),
+        name="redoc",
+    ),
+
+
+    # =================================================
+    # LOGIN PAGE
+    # =================================================
+
     path(
         "login/",
-        login_page
+        login_page,
+        name="login",
     ),
+
+
+    # =================================================
+    # DASHBOARD
+    # =================================================
 
     path(
         "dashboard/",
-        dashboard_page
+        dashboard_page,
+        name="dashboard",
+    ),
+
+
+    # =================================================
+    # ROOT
+    # =================================================
+
+    path(
+        "",
+        login_page,
+        name="home",
     ),
 ]
